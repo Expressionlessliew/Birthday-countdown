@@ -1,76 +1,69 @@
 const dates = document.getElementById("date");
 const prints = document.getElementById("print");
 const savebtn = document.getElementById("save");
-const dateregex =
-  /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
-let newdata;
+const remainingDaysContainer = document.getElementById("remainingDays");
+const Clear = document.getElementById("Clear");
+let inputDate;
+let formattedDate;
+let countdownInterval;
 
 //function
 
 dates.addEventListener("input", handlechange);
-savebtn.addEventListener("click", check);
+savebtn.addEventListener("click", countdown);
+Clear.addEventListener("click", clearCountdown);
+
+function clearCountdown() {
+  clearInterval(countdownInterval);
+  dates.value = "";
+  remainingDaysContainer.textContent = "";
+  const birthdayMessage = document.getElementById("birthday-message");
+  birthdayMessage.innerHTML = "";
+}
 
 function handlechange(event) {
-  newdata = event.target.value;
-  console.log(newdata);
+  inputDate = event.target.value;
+  console.log(inputDate);
 }
 
-function check() {
-  if (newdata != null) {
-    if (dateregex.test(save)) {
-      prints.innerHTML = "";
+function getTodayDate() {
+  const today = new Date();
+  const day = today.getDate();
+  const month = today.getMonth() + 1; // Months are zero-indexed, so add 1 to get the correct month
+  const year = today.getFullYear();
 
-      let enddate = newdata(newdata);
-      let timerId = setInterval(() => countdown(enddate, timerId), 1000);
-    }
+  // Format the date as "YYYY-MM-DD"
+  formattedDate = `${year}-${month.toString().padStart(2, "0")}-${day
+    .toString()
+    .padStart(2, "0")}`;
+}
+setInterval(getTodayDate, 10);
+
+function countdown() {
+  let initialDate = new Date(formattedDate);
+  let targetDate = new Date(inputDate);
+
+  let timeDiff = targetDate.getTime() - initialDate.getTime(); // Calculate time difference in milliseconds
+
+  // If the time difference is negative, add one year to it
+  if (timeDiff < 0) {
+    const oneYearMs = 365 * 24 * 60 * 60 * 1000; // One year in milliseconds
+    timeDiff += oneYearMs;
+  }
+
+  const birthdayMessage = document.getElementById("birthday-message");
+  if (timeDiff === 0) {
+    const CakeImage = document.createElement("img");
+    CakeImage.src =
+      "https://marketplace.canva.com/EAFYJKGkaTQ/1/0/1600w/canva-white-and-gold-modern-greeting-happy-birthday-card-MAo89x0go4c.jpg";
+    CakeImage.id = "cake-image";
+    birthdayMessage.appendChild(CakeImage);
   } else {
-    prints.innerHTML = "invalid date";
+    const remainingDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); // Convert milliseconds to days and round up
+    birthdayMessage.textContent = `Only ${remainingDays} days left until your birthday!`;
   }
+  const remainingDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); // Convert milliseconds to days and round up
+
+  console.log(`Remaining days: ${remainingDays}`); // Output: Remaining days: 5
+  remainingDaysContainer.innerHTML = remainingDays;
 }
-
-//date
-
-function time() {
-  const month = new Date().getMonth();
-  const date = new Date().getDate();
-  const months = [
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "10",
-    "11",
-    "12",
-  ];
-  const currentMonth = months[month];
-  const year1 = new Date().getFullYear();
-
-  clearInterval(timeId);
-  document.getElementById("time").innerHTML =
-    date + "/" + currentMonth + "/" + year1;
-}
-
-//bday
-function countdown(enddate, timerId) {
-  const bday = document.getElementById("bday");
-  let currentDate = new Date();
-  let weird = currentDate.getFullYear();
-  const years = new Date().getFullYear();
-
-  let remainingMonths =
-    (years - weird) * 12 + (enddate.getMonth() - currentDate.getMonth());
-
-  if (remaintime <= 0) {
-    bday.innerHTML = "Happy birthday!!";
-    clearInterval(timerId);
-    return;
-  }
-
-  bday.innerHTML = "Your birthday date countdown" + remainingMonths + "months";
-}
-let timeId = setInterval(time, 10);

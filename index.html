@@ -5,20 +5,28 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Birthday-countdown</title>
+    <link href="index.css" rel="stylesheet" />
   </head>
   <body>
-    <section>
-      <h1 id="b-day">B-day</h1>
-      <div id="day">
-        <input type="text" id="date" placeholder="input date like dd/mm/yyyy" /> <button id="save">SAVE</button>
-        <h3 id="print"></h3>
-       
-      </div>
-    </section>
-    <section>
-      <h1 id="time"></h1>
-      <h1 id="bday">date / month</h1>
-    </section>
+    <div class="container" id="container">
+      <section>
+        <h1 id="b-day">B-day</h1>
+        <div id="day">
+          <input
+            type="date"
+            id="date"
+            placeholder="input date like dd/mm/yyyy"
+          />
+          <button id="save">SAVE</button> <button id="Clear">Clear</button>
+          <h3 id="print"></h3>
+        </div>
+      </section>
+      <section>
+        <h1 id="time"></h1>
+        <h1>Days Remaining:</h1>
+        <div id="birthday-message"></div>
+      </section>
+    </div>
     <script src="index.js"></script>
   </body>
 </html>
